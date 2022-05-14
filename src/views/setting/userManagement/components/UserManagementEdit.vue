@@ -16,7 +16,7 @@
         <el-input v-model.trim="form.email" />
       </el-form-item>
       <el-form-item label="角色" prop="roles">
-        <el-checkbox-group v-model="form.roles">
+        <el-checkbox-group v-model="form.roleIds">
           <el-checkbox label="admin" />
           <el-checkbox label="editor" />
         </el-checkbox-group>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import { doEdit } from '@/api/userManagement'
+  import { doEdit, doSave } from '@/api/userManagement'
 
   export default defineComponent({
     name: 'UserManagementEdit',
@@ -41,7 +41,7 @@
       const state = reactive({
         formRef: null,
         form: {
-          roles: [],
+          roleIds: [],
         },
         rules: {
           username: [
@@ -51,7 +51,7 @@
             { required: true, trigger: 'blur', message: '请输入密码' },
           ],
           email: [{ required: true, trigger: 'blur', message: '请输入邮箱' }],
-          roles: [{ required: true, trigger: 'blur', message: '请选择角色' }],
+          roleIds: [{ required: true, trigger: 'blur', message: '请选择角色' }],
         },
         title: '',
         dialogFormVisible: false,
@@ -76,9 +76,15 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
-            const { msg } = await doEdit(state.form)
-            $baseMessage(msg, 'success', 'vab-hey-message-success')
-            emit('fetch-data')
+            if (state.title === '添加') {
+              const { msg } = await doSave(state.form)
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+              emit('fetch-data')
+            } else {
+              const { msg } = await doEdit(state.form)
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+              emit('fetch-data')
+            }
             close()
           }
         })

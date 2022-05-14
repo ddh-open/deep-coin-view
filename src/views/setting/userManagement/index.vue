@@ -34,11 +34,6 @@
       @selection-change="setSelectRows"
     >
       <el-table-column align="center" show-overflow-tooltip type="selection" />
-      <el-table-column align="center" label="序号" width="55">
-        <template #default="{ $index }">
-          {{ $index + 1 }}
-        </template>
-      </el-table-column>
       <el-table-column
         align="center"
         label="id"
@@ -69,18 +64,18 @@
       <el-table-column
         align="center"
         label="修改时间"
-        prop="datatime"
+        prop="updated_at"
         show-overflow-tooltip
       />
       <el-table-column
         align="center"
         label="操作"
         show-overflow-tooltip
-        width="110"
+        width="200"
       >
         <template #default="{ row }">
-          <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(row)">删除</el-button>
+          <el-button type="info" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
       <template #empty>
@@ -89,7 +84,7 @@
     </el-table>
     <el-pagination
       background
-      :current-page="queryForm.pageNo"
+      :current-page="queryForm.page"
       :layout="layout"
       :page-size="queryForm.pageSize"
       :total="total"
@@ -123,7 +118,7 @@
         total: 0,
         selectRows: '',
         queryForm: {
-          pageNo: 1,
+          page: 1,
           pageSize: 10,
           username: '',
         },
@@ -142,7 +137,7 @@
       const handleDelete = (row) => {
         if (row.id) {
           $baseConfirm('你确定要删除当前项吗', null, async () => {
-            const { msg } = await doDelete({ ids: row.id })
+            const { msg } = await doDelete({ ids: row.id.toString() })
             $baseMessage(msg, 'success', 'vab-hey-message-success')
             await fetchData()
           })
@@ -164,11 +159,11 @@
         fetchData()
       }
       const handleCurrentChange = (val) => {
-        state.queryForm.pageNo = val
+        state.queryForm.page = val
         fetchData()
       }
       const queryData = () => {
-        state.queryForm.pageNo = 1
+        state.queryForm.page = 1
         fetchData()
       }
       const fetchData = async () => {

@@ -6,44 +6,11 @@
     @close="close"
   >
     <el-form ref="formRef" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="角色码" prop="role">
-        <el-input v-model="form.role" />
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="菜单">
-        <div class="vab-tree-border">
-          <el-tree
-            ref="treeRef"
-            :data="list"
-            :default-checked-keys="[
-              '/',
-              '/vab',
-              '/other',
-              '/mall',
-              '/noColumn',
-              '/setting',
-              '//github.com/chuzhixin/vue-admin-beautiful?utm_source=gold_browser_extension',
-              '/error',
-            ]"
-            :default-expanded-keys="[]"
-            node-key="path"
-            show-checkbox
-          >
-            <template #default="{ data }">
-              <span>{{ data.meta.title }}</span>
-            </template>
-          </el-tree>
-        </div>
-      </el-form-item>
-      <el-form-item label="按钮权限">
-        <el-checkbox-group v-model="form.btnRolesCheckedList">
-          <el-checkbox
-            v-for="item in btnRoles"
-            :key="item.value"
-            :label="item.value"
-          >
-            {{ item.lable }}
-          </el-checkbox>
-        </el-checkbox-group>
+      <el-form-item label="角色描述" prop="remark">
+        <el-input v-model="form.remark" type="textarea" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -54,7 +21,7 @@
 </template>
 
 <script>
-  import { doEdit } from '@/api/roleManagement'
+  import { doEdit, doSave } from '@/api/roleManagement'
   import { getList } from '@/api/router'
 
   export default defineComponent({
@@ -67,29 +34,18 @@
         formRef: null,
         treeRef: null,
         form: {
-          btnRolesCheckedList: [],
+          name: '',
+          remark: '',
+          parentId: '0',
         },
         rules: {
-          role: [{ required: true, trigger: 'blur', message: '请输入角色码' }],
+          role: [
+            { required: true, trigger: 'blur', message: '请输入角色名称' },
+          ],
         },
         title: '',
         dialogFormVisible: false,
         list: [],
-        /* btnRoles demo */
-        btnRoles: [
-          {
-            lable: '读',
-            value: 'read:system',
-          },
-          {
-            lable: '写',
-            value: 'write:system',
-          },
-          {
-            lable: '删',
-            value: 'delete:system',
-          },
-        ],
       })
 
       const showEdit = (row) => {
@@ -117,13 +73,17 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
-            const tree = state['treeRef'].getCheckedKeys()
-            const treeObject = { 'treeArray:': tree }
-            const { msg } = await doEdit({
-              ...state.form,
-              ...treeObject,
-            })
-            $baseMessage(msg, 'success', 'vab-hey-message-success')
+            if (state.title === '添加') {
+              const { msg } = await doSave({
+                ...state.form,
+              })
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+            } else {
+              const { msg } = await doEdit({
+                ...state.form,
+              })
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+            }
             emit('fetch-data')
             close()
           }

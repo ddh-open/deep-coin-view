@@ -13,9 +13,10 @@
         <el-form inline :model="queryForm" @submit.prevent>
           <el-form-item>
             <el-input
-              v-model.trim="queryForm.role"
+              v-model.trim="queryForm.name"
               clearable
               placeholder="请输入角色"
+              @keydown.enter="queryData"
             />
           </el-form-item>
           <el-form-item>
@@ -34,11 +35,6 @@
       @selection-change="setSelectRows"
     >
       <el-table-column align="center" show-overflow-tooltip type="selection" />
-      <el-table-column align="center" label="序号" width="55">
-        <template #default="{ $index }">
-          {{ $index + 1 }}
-        </template>
-      </el-table-column>
       <el-table-column
         align="center"
         label="id"
@@ -47,32 +43,38 @@
       />
       <el-table-column
         align="center"
-        label="角色码"
-        prop="role"
+        label="角色名称"
+        prop="name"
         show-overflow-tooltip
       />
-      <el-table-column align="center" label="按钮权限" show-overflow-tooltip>
-        <template #default="{ row }">
-          <el-tag v-for="(item, index) in row.btnRolesCheckedList" :key="index">
-            {{
-              {
-                'read:system': '读',
-                'write:system': '写',
-                'delete:system': '删',
-              }[item]
-            }}
-          </el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column
+        align="center"
+        label="描述"
+        prop="remark"
+        show-overflow-tooltip
+      />
       <el-table-column
         align="center"
         label="操作"
         show-overflow-tooltip
-        width="110"
+        width="400"
       >
         <template #default="{ row }">
-          <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(row)">删除</el-button>
+          <el-button size="small" type="primary" @click="handleEdit(row)">
+            设置权限
+          </el-button>
+          <el-button size="small" type="info" @click="handleEdit(row)">
+            新增子菜单
+          </el-button>
+          <el-button size="small" type="text" @click="handleEdit(row)">
+            拷贝
+          </el-button>
+          <el-button size="small" type="赋权" @click="handleEdit(row)">
+            编辑
+          </el-button>
+          <el-button size="small" type="danger" @click="handleDelete(row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
       <template #empty>
@@ -85,7 +87,7 @@
     </el-table>
     <el-pagination
       background
-      :current-page="queryForm.pageNo"
+      :current-page="queryForm.page"
       :layout="layout"
       :page-size="queryForm.pageSize"
       :total="total"
@@ -119,9 +121,9 @@
         total: 0,
         selectRows: '',
         queryForm: {
-          pageNo: 1,
+          page: 1,
           pageSize: 10,
-          role: '',
+          name: '',
         },
       })
 
@@ -138,7 +140,7 @@
       const handleDelete = (row) => {
         if (row.id) {
           $baseConfirm('你确定要删除当前项吗', null, async () => {
-            const { msg } = await doDelete({ ids: row.id })
+            const { msg } = await doDelete({ ids: row.id.toString() })
             $baseMessage(msg, 'success', 'vab-hey-message-success')
             await fetchData()
           })
@@ -160,11 +162,11 @@
         fetchData()
       }
       const handleCurrentChange = (val) => {
-        state.queryForm.pageNo = val
+        state.queryForm.page = val
         fetchData()
       }
       const queryData = () => {
-        state.queryForm.pageNo = 1
+        state.queryForm.page = 1
         fetchData()
       }
       const fetchData = async () => {

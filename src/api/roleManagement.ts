@@ -1,16 +1,24 @@
 import request from '@/utils/request'
 
-export function getList(params: any) {
+export function getList(data: any) {
   return request({
-    url: '/roleManagement/getList',
-    method: 'get',
-    params,
+    url: '/sys/roles/list',
+    method: 'post',
+    data,
   })
 }
 
 export function doEdit(data: any) {
   return request({
-    url: '/roleManagement/doEdit',
+    url: '/sys/roles/modify',
+    method: 'put',
+    data,
+  })
+}
+
+export function doSave(data: any) {
+  return request({
+    url: '/sys/roles/add',
     method: 'post',
     data,
   })
@@ -18,8 +26,8 @@ export function doEdit(data: any) {
 
 export function doDelete(data: any) {
   return request({
-    url: '/roleManagement/doDelete',
-    method: 'post',
+    url: '/sys/roles/delete',
+    method: 'delete',
     data,
   })
 }

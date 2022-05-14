@@ -43,6 +43,8 @@ module.exports = {
   loginInterception: true,
   // 是否开启登录RSA加密
   loginRSA: false,
+  // 是否开启base64加密
+  loginBase64: true,
   // intelligence(前端导出路由)和 all(后端导出路由)两种方式
   authentication: 'intelligence',
   // 是否支持游客模式，支持情况下，访问白名单，可查看所有asyncRoutes
@@ -61,7 +63,7 @@ module.exports = {
     '/other/drag',
   ],
   // 需要加loading层的请求，防止重复提交
-  debounce: ['doEdit'],
+  debounce: ['doEdit', 'doSave'],
   // 分栏布局和综合布局时，是否点击一级菜单默认开启二级菜单(默认第一个，可通过redirect自定义)
   openFirstMenu: true,
 }

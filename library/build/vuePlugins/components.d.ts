@@ -67,6 +67,7 @@ declare module '@vue/runtime-core' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTextatea: typeof import('element-plus/es')['ElTextatea']
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']

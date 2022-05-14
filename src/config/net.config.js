@@ -7,14 +7,14 @@ module.exports = {
   // 问号后边代表开发环境，冒号后边代表生产环境
   baseURL:
     process.env.NODE_ENV === 'development'
-      ? '/vab-mock-server'
-      : '/vab-mock-server',
+      ? 'http://127.0.0.1:8086/'
+      : 'http://127.0.0.1:8086/',
   // 配后端数据的接收方式application/json;charset=UTF-8 或 application/x-www-form-urlencoded;charset=UTF-8
   contentType: 'application/json;charset=UTF-8',
   // 最长请求时间
   requestTimeout: 10000,
   // 操作正常code，支持String、Array、int多种类型
-  successCode: [200, 0, '200', '0'],
+  successCode: [200, 0, 1, '200', '0', '1'],
   // 数据状态的字段名称
   statusName: 'code',
   // 状态信息的字段名称
