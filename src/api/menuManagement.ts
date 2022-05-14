@@ -1,16 +1,24 @@
 import request from '@/utils/request'
 
-export function getTree(params: any) {
+export function getList(data: any) {
   return request({
-    url: '/menuManagement/getList',
-    method: 'get',
-    params,
+    url: '/sys/menu/list',
+    method: 'post',
+    data,
   })
 }
 
 export function doEdit(data: any) {
   return request({
-    url: '/menuManagement/doEdit',
+    url: '/sys/menu/modify',
+    method: 'put',
+    data,
+  })
+}
+
+export function doSave(data: any) {
+  return request({
+    url: '/sys/menu/add',
     method: 'post',
     data,
   })
@@ -18,8 +26,8 @@ export function doEdit(data: any) {
 
 export function doDelete(data: any) {
   return request({
-    url: '/menuManagement/doDelete',
-    method: 'post',
+    url: '/sys/menu/delete',
+    method: 'delete',
     data,
   })
 }

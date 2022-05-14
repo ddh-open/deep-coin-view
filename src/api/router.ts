@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function getList() {
+export function getTree() {
   return request({
-    url: '/router/getList',
+    url: '/sys/menu/get/tree',
     method: 'get',
   })
 }

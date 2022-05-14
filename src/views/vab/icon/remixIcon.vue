@@ -63,7 +63,7 @@
       <el-col :span="24">
         <el-pagination
           background
-          :current-page="queryForm.pageNo"
+          :current-page="queryForm.page"
           :layout="layout"
           :page-size="queryForm.pageSize"
           :page-sizes="[72, 144, 216, 288]"
@@ -88,7 +88,7 @@
         queryIcon: [],
         total: 0,
         queryForm: {
-          pageNo: 1,
+          page: 1,
           pageSize: 72,
           title: '',
           colorful: false,
@@ -114,11 +114,11 @@
         fetchData()
       }
       const handleCurrentChange = (val) => {
-        state.queryForm.pageNo = val
+        state.queryForm.page = val
         fetchData()
       }
       const queryData = () => {
-        state.queryForm.pageNo = 1
+        state.queryForm.page = 1
         fetchData()
       }
       const handleCopyText = (item, event) => {

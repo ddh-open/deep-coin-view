@@ -6,7 +6,7 @@ import { convertRouter, filterRoutes } from '@/utils/routes'
 import { authentication, rolesControl } from '@/config'
 import { OptionType, RoutesModuleType } from '/#/store'
 import { isArray } from '@/utils/validate'
-import { getList } from '@/api/router'
+import { getTree } from '@/api/router'
 import { gp } from '@gp'
 import { VabRouteRecord } from '/#/router'
 
@@ -64,7 +64,7 @@ export const useRoutesStore = defineStore('routes', {
       if (authentication === 'all') {
         const {
           data: { list },
-        } = await getList()
+        } = await getTree()
         if (!isArray(list))
           gp.$baseMessage(
             '路由格式返回有误！',

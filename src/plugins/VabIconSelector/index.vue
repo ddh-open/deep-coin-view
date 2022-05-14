@@ -10,7 +10,7 @@
     selectRows: '',
     queryIcon: [],
     queryForm: {
-      pageNo: 1,
+      page: 1,
       pageSize: 16,
       title: '',
     },
@@ -21,11 +21,11 @@
     fetchData()
   }
   const handleCurrentChange: any = (val: string) => {
-    state.queryForm.pageNo = val
+    state.queryForm.page = val
     fetchData()
   }
   const queryData: any = () => {
-    state.queryForm.pageNo = 1
+    state.queryForm.page = 1
     fetchData()
   }
   const fetchData: any = async () => {
@@ -72,7 +72,7 @@
     <el-col :span="24">
       <el-pagination
         :background="state.background"
-        :current-page="state.queryForm.pageNo"
+        :current-page="state.queryForm.page"
         :layout="state.layout"
         :page-size="state.queryForm.pageSize"
         :total="state.total"

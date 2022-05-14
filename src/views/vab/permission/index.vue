@@ -261,7 +261,7 @@
     rolesControl,
     tokenTableName,
   } from '@/config'
-  import { getList } from '@/api/router'
+  import { getTree } from '@/api/router'
   import { filterRoutes } from '@/utils/routes'
   import { expireToken } from '@/api/refreshToken'
   import { Random } from 'mockjs'
@@ -291,7 +291,7 @@
       const fetchData = async () => {
         const {
           data: { list },
-        } = await getList()
+        } = await getTree()
         state.tableData = filterRoutes([...list])
       }
       const handleChangeRole = async () => {

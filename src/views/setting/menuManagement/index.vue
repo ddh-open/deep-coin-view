@@ -29,29 +29,21 @@
             row-key="path"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           >
-            <el-table-column
-              label="标题"
-              prop="meta.title"
-              show-overflow-tooltip
-            />
+            <el-table-column label="标题" prop="title" show-overflow-tooltip />
             <el-table-column label="name" prop="name" show-overflow-tooltip />
             <el-table-column label="路径" prop="path" show-overflow-tooltip />
-            <el-table-column label="是否隐藏" show-overflow-tooltip>
+            <el-table-column label="隐藏" show-overflow-tooltip>
               <template #default="{ row }">
                 {{ row.meta.hidden ? '是' : '否' }}
               </template>
             </el-table-column>
-            <el-table-column
-              label="是否隐藏当前节点"
-              show-overflow-tooltip
-              width="100"
-            >
+            <el-table-column label="始终显示" show-overflow-tooltip width="100">
               <template #default="{ row }">
                 {{ row.meta.levelHidden ? '是' : '否' }}
               </template>
             </el-table-column>
             <el-table-column
-              label="vue文件路径"
+              label="文件路径"
               prop="component"
               show-overflow-tooltip
             />
@@ -65,16 +57,12 @@
                 <vab-icon v-if="row.meta.icon" :icon="row.meta.icon" />
               </template>
             </el-table-column>
-            <el-table-column label="是否固定" show-overflow-tooltip>
+            <el-table-column label="固定" show-overflow-tooltip>
               <template #default="{ row }">
                 {{ row.meta.noClosable ? '是' : '否' }}
               </template>
             </el-table-column>
-            <el-table-column
-              label="是否无缓存"
-              show-overflow-tooltip
-              width="120"
-            >
+            <el-table-column label="无缓存" show-overflow-tooltip width="120">
               <template #default="{ row }">
                 {{ row.meta.noKeepAlive ? '是' : '否' }}
               </template>
@@ -91,10 +79,23 @@
                 {{ row.meta.dot ? '是' : '否' }}
               </template>
             </el-table-column>
-            <el-table-column label="操作" show-overflow-tooltip width="110">
+            <el-table-column label="操作" show-overflow-tooltip width="260">
               <template #default="{ row }">
-                <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-                <el-button type="text" @click="handleDelete(row)">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="handleEdit(row, 'addChild')"
+                >
+                  新增子菜单
+                </el-button>
+                <el-button size="small" type="info" @click="handleEdit(row)">
+                  编辑
+                </el-button>
+                <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(row)"
+                >
                   删除
                 </el-button>
               </template>
@@ -115,8 +116,8 @@
 </template>
 
 <script>
-  import { getList } from '@/api/router'
-  import { doDelete, getTree } from '@/api/menuManagement'
+  import { getTree } from '@/api/router'
+  import { doDelete, getList } from '@/api/menuManagement'
   import { Plus } from '@element-plus/icons-vue'
 
   export default defineComponent({
@@ -135,15 +136,15 @@
         data: [],
         defaultProps: {
           children: 'children',
-          label: 'label',
+          label: 'title',
         },
         list: [],
         listLoading: true,
       })
 
-      const handleEdit = (row) => {
+      const handleEdit = (row, method) => {
         if (row && row.path) {
-          state['editRef'].showEdit(row)
+          state['editRef'].showEdit(row, method)
         } else {
           state['editRef'].showEdit()
         }
@@ -151,7 +152,7 @@
       const handleDelete = (row) => {
         if (row.path) {
           $baseConfirm('你确定要删除当前项吗', null, async () => {
-            const { msg } = await doDelete({ paths: row.path })
+            const { msg } = await doDelete({ ids: row.id })
             $baseMessage(msg, 'success', 'vab-hey-message-success')
             await fetchData()
           })

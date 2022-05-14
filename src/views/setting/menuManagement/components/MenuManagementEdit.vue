@@ -13,7 +13,7 @@
       :rules="rules"
     >
       <el-form-item label="父级Id" prop="parentId">
-        <el-input v-model="form.parentId" />
+        <el-input v-model="form.parentId" disabled />
       </el-form-item>
       <el-form-item label="name" prop="name">
         <el-input v-model="form.name" />
@@ -27,8 +27,8 @@
       <el-form-item label="重定向" prop="redirect">
         <el-input v-model="form.redirect" />
       </el-form-item>
-      <el-form-item label="标题" prop="meta.title">
-        <el-input v-model="form.meta.title" />
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="form.title" />
       </el-form-item>
       <el-form-item label="图标">
         <el-popover
@@ -54,17 +54,11 @@
       <el-form-item label="始终显示当前节点">
         <el-switch v-model="form.meta.levelHidden" />
       </el-form-item>
-      <el-form-item label="自定义svg图标">
-        <el-switch v-model="form.meta.isCustomSvg" />
-      </el-form-item>
       <el-form-item label="固定">
         <el-switch v-model="form.meta.noClosable" />
       </el-form-item>
       <el-form-item label="无缓存">
         <el-switch v-model="form.meta.noKeepAlive" />
-      </el-form-item>
-      <el-form-item label="不显示当前标签页">
-        <el-switch v-model="form.meta.tabHidden" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -76,7 +70,7 @@
 
 <script>
   import VabIconSelector from '@/plugins/VabIconSelector'
-  import { doEdit } from '@/api/menuManagement'
+  import { doEdit, doSave } from '@/api/menuManagement'
 
   export default defineComponent({
     name: 'MenuManagementEdit',
@@ -89,7 +83,6 @@
         formRef: null,
         form: {
           meta: {
-            title: '',
             icon: '',
             badge: '',
             dot: false,
@@ -110,9 +103,7 @@
           component: [
             { required: true, trigger: 'blur', message: '请输入component' },
           ],
-          'meta.title': [
-            { required: true, trigger: 'blur', message: '请输入标题' },
-          ],
+          title: [{ required: true, trigger: 'blur', message: '请输入标题' }],
         },
         title: '',
         dialogFormVisible: false,
@@ -121,12 +112,18 @@
       const handleIcon = (item) => {
         state.form.meta.icon = item
       }
-      const showEdit = (row) => {
+      const showEdit = (row, method) => {
         if (!row) {
           state.title = '添加'
+          state.form.parentId = '0'
         } else {
-          state.title = '编辑'
-          state.form = JSON.parse(JSON.stringify(row))
+          if (method === 'addChild') {
+            state.title = '添加'
+            state.form.parentId = row.id.toString()
+          } else {
+            state.title = '编辑'
+            state.form = JSON.parse(JSON.stringify(row))
+          }
         }
         state.dialogFormVisible = true
       }
@@ -142,8 +139,14 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
-            const { msg } = await doEdit(state.form)
-            $baseMessage(msg, 'success', 'vab-hey-message-success')
+            if (state.title === '添加') {
+              const { msg } = await doSave(state.form)
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+            } else {
+              const { msg } = await doEdit(state.form)
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+            }
+
             emit('fetch-data')
             close()
           }

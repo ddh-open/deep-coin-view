@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getIconList(params: any) {
+export function getIconList(data: any) {
   return request({
-    url: '/remixIcon/getList',
-    method: 'get',
-    params,
+    url: '/sys/icon/list',
+    method: 'post',
+    data,
   })
 }

@@ -93,7 +93,6 @@ declare global {
   const ElTabPane: typeof import('element-plus/es')['ElTabPane']
   const ElTabs: typeof import('element-plus/es')['ElTabs']
   const ElTag: typeof import('element-plus/es')['ElTag']
-  const ElTextatea: typeof import('element-plus/es')['ElTextatea']
   const ElTimeline: typeof import('element-plus/es')['ElTimeline']
   const ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
   const ElTimePicker: typeof import('element-plus/es')['ElTimePicker']

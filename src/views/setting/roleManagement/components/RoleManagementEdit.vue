@@ -22,7 +22,7 @@
 
 <script>
   import { doEdit, doSave } from '@/api/roleManagement'
-  import { getList } from '@/api/router'
+  import { getTree } from '@/api/router'
 
   export default defineComponent({
     name: 'RoleManagementEdit',
@@ -67,7 +67,7 @@
       const fetchData = async () => {
         const {
           data: { list },
-        } = await getList()
+        } = await getTree()
         state.list = list
       }
       const save = () => {
