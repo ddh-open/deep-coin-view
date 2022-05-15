@@ -40,6 +40,7 @@
         label="id"
         prop="id"
         show-overflow-tooltip
+        width="90"
       />
       <el-table-column
         align="center"
@@ -57,19 +58,16 @@
         align="center"
         label="操作"
         show-overflow-tooltip
-        width="400"
+        width="300"
       >
         <template #default="{ row }">
           <el-button size="small" type="primary" @click="handleEdit(row)">
             设置权限
           </el-button>
-          <el-button size="small" type="info" @click="handleEdit(row)">
-            新增子菜单
-          </el-button>
           <el-button size="small" type="text" @click="handleEdit(row)">
             拷贝
           </el-button>
-          <el-button size="small" type="赋权" @click="handleEdit(row)">
+          <el-button size="small" type="info" @click="handleEdit(row)">
             编辑
           </el-button>
           <el-button size="small" type="danger" @click="handleDelete(row)">

@@ -6,3 +6,10 @@ export function getTree() {
     method: 'get',
   })
 }
+
+export function getUserMenuTree() {
+  return request({
+    url: '/sys/menu/user',
+    method: 'get',
+  })
+}

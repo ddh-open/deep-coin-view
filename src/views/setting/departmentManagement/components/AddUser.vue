@@ -6,28 +6,22 @@
     @close="close"
   >
     <el-form ref="formRef" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="父节点" prop="parentName">
-        <el-select v-model="form.parentId" placeholder="请选择父节点">
+      <el-form-item label="关联用户" prop="userIds">
+        <el-select
+          v-model="form.userIds"
+          collapse-tags
+          collapse-tags-tooltip
+          filterable
+          multiple
+          placeholder="请选择用户"
+        >
           <el-option
-            :label="form.parentName"
-            style="height: auto; padding: 0"
-            :value="form.parentId"
-          >
-            <el-tree
-              ref="treeRef"
-              :data="treeData"
-              default-expand-all
-              :props="defaultProps"
-              @node-click="handleNodeClick"
-            />
-          </el-option>
+            v-for="item in data"
+            :key="item.value"
+            :label="item.username"
+            :value="item.id"
+          />
         </el-select>
-      </el-form-item>
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="排序" prop="order">
-        <el-input v-model="form.order" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -38,31 +32,28 @@
 </template>
 
 <script>
-  import { doEdit, getList, doSave } from '@/api/departmentManagement'
+  import { getList } from '@/api/userManagement'
+  import { doAddUser } from '@/api/departmentManagement'
 
   export default defineComponent({
-    name: 'DepartmentManagementEdit',
+    name: 'AddUser',
     emits: ['fetch-data'],
     setup(props, { emit }) {
       const $baseMessage = inject('$baseMessage')
 
       const state = reactive({
         formRef: null,
-        treeData: [],
+        data: [],
         defaultProps: {
           children: 'children',
           label: 'name',
         },
         form: {
-          parentName: '',
-          parentId: '',
+          userIds: '',
+          groupId: '',
         },
         rules: {
-          parentName: [
-            { required: true, trigger: 'blur', message: '请选择父节点' },
-          ],
-          name: [{ required: true, trigger: 'blur', message: '请输入名称' }],
-          order: [{ required: true, trigger: 'blur', message: '请输入排序' }],
+          userIds: [{ required: true, trigger: 'blur', message: '请选择用户' }],
         },
         title: '',
         dialogFormVisible: false,
@@ -72,19 +63,15 @@
         const {
           data: { list },
         } = await getList({})
-        state.treeData = list
+        state.data = list
       }
       const handleNodeClick = (node) => {
         state.form.parentName = node.name
         state.form.parentId = node.id
       }
       const showEdit = (row) => {
-        if (!row) {
-          state.title = '添加'
-        } else {
-          state.title = '编辑'
-          state.form = JSON.parse(JSON.stringify(row))
-        }
+        state.form.groupId = row.id
+        state.title = '关联用户'
         state.dialogFormVisible = true
       }
       const close = () => {
@@ -98,13 +85,8 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
-            if (state.title === '添加') {
-              const { msg } = await doSave(state.form)
-              $baseMessage(msg, 'success', 'vab-hey-message-success')
-            } else {
-              const { msg } = await doEdit(state.form)
-              $baseMessage(msg, 'success', 'vab-hey-message-success')
-            }
+            const { msg } = await doAddUser(state.form)
+            $baseMessage(msg, 'success', 'vab-hey-message-success')
             emit('fetch-data')
             close()
           }

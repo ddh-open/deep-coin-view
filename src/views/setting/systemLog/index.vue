@@ -3,16 +3,16 @@
     <vab-query-form>
       <vab-query-form-top-panel>
         <el-form inline label-width="60px" :model="queryForm" @submit.prevent>
-          <el-form-item label="账号">
+          <el-form-item label="用户名">
             <el-input
-              v-model.trim="queryForm.account"
+              v-model.trim="queryForm.username"
               clearable
-              placeholder="请输入账号"
+              placeholder="请输入用户名"
             />
           </el-form-item>
-          <el-form-item label="周期">
+          <el-form-item label="时间">
             <el-date-picker
-              v-model="queryForm.searchDate"
+              v-model="queryForm.timeFilter"
               end-placeholder="结束日期"
               start-placeholder="开始日期"
               type="daterange"
@@ -32,67 +32,74 @@
         <template #default="{ row }">
           <div class="vab-table-expand">
             <p>
-              <span class="vab-table-expand-title">日志类型:</span>
-              {{ row.type }}
+              <span class="vab-table-expand-title">账号:</span>
+              {{ row.username }}
             </p>
             <p>
-              <span class="vab-table-expand-title">账号:</span>
-              {{ row.account }}
+              <span class="vab-table-expand-title">请求路径:</span>
+              {{ row.path }}
+            </p>
+            <p>
+              <span class="vab-table-expand-title">请求体:</span>
+              {{ row.body }}
+            </p>
+            <p>
+              <span class="vab-table-expand-title">方法:</span>
+              {{ row.method }}
+            </p>
+            <p>
+              <span class="vab-table-expand-title">状态码:</span>
+              {{ row.status }}
             </p>
             <p>
               <span class="vab-table-expand-title">执行结果:</span>
-              <span v-if="row.executeResult === '登录成功'">
-                <span class="vab-dot vab-dot-success"><span></span></span>
-                {{ row.executeResult }}
-              </span>
-              <span v-else>
-                <span class="vab-dot vab-dot-error"><span></span></span>
-                {{ row.executeResult }}
-              </span>
+              {{ row.resp }}
             </p>
             <p>
               <span class="vab-table-expand-title">登录IP:</span>
               {{ row.ip }}
             </p>
             <p>
+              <span class="vab-table-expand-title">代理:</span>
+              {{ row.agent }}
+            </p>
+            <p>
               <span class="vab-table-expand-title">访问时间:</span>
-              {{ row.datetime }}
+              {{ row.createdAt }}
             </p>
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="日志类型"
-        prop="type"
-        show-overflow-tooltip
-        width="230px"
-      />
-      <el-table-column label="账号" prop="account" show-overflow-tooltip />
-      <el-table-column
-        label="执行结果"
-        prop="executeResult"
-        show-overflow-tooltip
-      >
+      <el-table-column label="账号" prop="username" show-overflow-tooltip />
+      <el-table-column label="请求路径" prop="path" show-overflow-tooltip />
+      <el-table-column label="请求体" prop="body" show-overflow-tooltip />
+      <el-table-column label="方法" prop="method" show-overflow-tooltip />
+      <el-table-column label="状态码" prop="status" show-overflow-tooltip>
         <template #default="{ row }">
-          <span v-if="row.executeResult === '登录成功'">
+          <span v-if="row.status === 200">
             <span class="vab-dot vab-dot-success"><span></span></span>
-            {{ row.executeResult }}
+            {{ row.status }}
           </span>
           <span v-else>
             <span class="vab-dot vab-dot-error"><span></span></span>
-            {{ row.executeResult }}
+            {{ row.status }}
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="执行结果" prop="resp" show-overflow-tooltip />
       <el-table-column label="登录IP" prop="ip" />
-      <el-table-column label="访问时间" prop="datetime" show-overflow-tooltip />
+      <el-table-column
+        label="访问时间"
+        prop="createdAt"
+        show-overflow-tooltip
+      />
       <template #empty>
         <el-empty class="vab-data-empty" description="暂无数据" />
       </template>
     </el-table>
     <el-pagination
       background
-      :current-page="queryForm.pageNo"
+      :current-page="queryForm.page"
       :layout="layout"
       :page-size="queryForm.pageSize"
       :total="total"
@@ -115,9 +122,9 @@
         layout: 'total, sizes, prev, pager, next, jumper',
         total: 0,
         queryForm: {
-          account: '',
-          searchDate: '',
-          pageNo: 1,
+          username: '',
+          timeFilter: [],
+          page: 1,
           pageSize: 20,
         },
       })
@@ -136,11 +143,11 @@
         fetchData()
       }
       const handleCurrentChange = (val) => {
-        state.queryForm.pageNo = val
+        state.queryForm.page = val
         fetchData()
       }
       const queryData = () => {
-        state.queryForm.pageNo = 1
+        state.queryForm.page = 1
         fetchData()
       }
       onMounted(() => {

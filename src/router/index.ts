@@ -912,6 +912,15 @@ export const asyncRoutes: VabRouteRecord[] = [
         },
       },
       {
+        path: 'apiManagement',
+        name: 'ApiManagement',
+        component: () => import('@/views/setting/apiManagement/index.vue'),
+        meta: {
+          title: 'api管理',
+          icon: 'menu-2-fill',
+        },
+      },
+      {
         path: 'taskManagement',
         name: 'TaskManagement',
         component: () => import('@/views/setting/taskManagement/index.vue'),

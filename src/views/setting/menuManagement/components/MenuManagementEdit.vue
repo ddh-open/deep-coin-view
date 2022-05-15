@@ -27,8 +27,11 @@
       <el-form-item label="重定向" prop="redirect">
         <el-input v-model="form.redirect" />
       </el-form-item>
-      <el-form-item label="标题" prop="title">
-        <el-input v-model="form.title" />
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model="form.sort" />
+      </el-form-item>
+      <el-form-item label="标题" prop="meta.title">
+        <el-input v-model="form.meta.title" />
       </el-form-item>
       <el-form-item label="图标">
         <el-popover
@@ -83,6 +86,7 @@
         formRef: null,
         form: {
           meta: {
+            title: '',
             icon: '',
             badge: '',
             dot: false,
@@ -103,7 +107,9 @@
           component: [
             { required: true, trigger: 'blur', message: '请输入component' },
           ],
-          title: [{ required: true, trigger: 'blur', message: '请输入标题' }],
+          'meta.title': [
+            { required: true, trigger: 'blur', message: '请输入标题' },
+          ],
         },
         title: '',
         dialogFormVisible: false,
@@ -139,6 +145,8 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
+            // 把string 转 int
+            state.form.sort = state.form.sort - 0
             if (state.title === '添加') {
               const { msg } = await doSave(state.form)
               $baseMessage(msg, 'success', 'vab-hey-message-success')

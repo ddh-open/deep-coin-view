@@ -39,6 +39,7 @@
         label="id"
         prop="id"
         show-overflow-tooltip
+        width="90"
       />
       <el-table-column
         align="center"
@@ -64,7 +65,7 @@
       <el-table-column
         align="center"
         label="修改时间"
-        prop="updated_at"
+        prop="updatedAt"
         show-overflow-tooltip
       />
       <el-table-column
@@ -74,8 +75,12 @@
         width="200"
       >
         <template #default="{ row }">
-          <el-button type="info" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-button size="small" type="info" @click="handleEdit(row)">
+            编辑
+          </el-button>
+          <el-button size="small" type="danger" @click="handleDelete(row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
       <template #empty>

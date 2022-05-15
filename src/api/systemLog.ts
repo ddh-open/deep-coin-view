@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getList(params: any) {
+export function getList(data: any) {
   return request({
-    url: '/systemLog/getList',
-    method: 'get',
-    params,
+    url: '/sys/operation/list',
+    method: 'post',
+    data,
   })
 }

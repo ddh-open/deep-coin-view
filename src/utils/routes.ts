@@ -22,7 +22,6 @@ export function convertRouter(asyncRoutes: VabRouteRecord[]) {
       else
         throw `后端路由加载失败，请输入'Layout'或以'@/'开头的本地组件地址: ${route.component}`
     }
-
     if (route.children)
       route.children.length
         ? (route.children = convertRouter(route.children))

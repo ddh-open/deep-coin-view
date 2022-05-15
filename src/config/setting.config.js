@@ -46,7 +46,7 @@ module.exports = {
   // 是否开启base64加密
   loginBase64: true,
   // intelligence(前端导出路由)和 all(后端导出路由)两种方式
-  authentication: 'intelligence',
+  authentication: 'all',
   // 是否支持游客模式，支持情况下，访问白名单，可查看所有asyncRoutes
   supportVisit: false,
   // 是否开启roles字段进行角色权限控制(如果是all模式后端完全处理角色并进行json组装，可设置false不处理路由中的roles字段)

@@ -9,7 +9,7 @@ import { UserModuleType } from '/#/store'
 import { getUserInfo, login, logout, socialLogin } from '@/api/user'
 import { getToken, removeToken, setToken } from '@/utils/token'
 import { resetRouter } from '@/router'
-import { isArray, isString } from '@/utils/validate'
+import { isString } from '@/utils/validate'
 import { tokenName } from '@/config'
 import { gp } from '@gp'
 
@@ -61,7 +61,7 @@ export const useUserStore = defineStore('user', {
      * @param {string} token 更新令牌
      * @param {string} tokenName 令牌名称
      */
-    afterLogin(token: string, tokenName: string) {
+    async afterLogin(token: string, tokenName: string) {
       const settingsStore = useSettingsStore()
       if (token) {
         this.setToken(token)
@@ -109,7 +109,7 @@ export const useUserStore = defineStore('user', {
      */
     async getUserInfo() {
       const {
-        data: { username, avatar, roles, permissions },
+        data: { username, avatar },
       } = await getUserInfo()
       /**
        * 检验返回数据是否正常，无对应参数，将使用默认用户名,头像,Roles和Permissions
@@ -118,25 +118,15 @@ export const useUserStore = defineStore('user', {
        * roles {List}
        * ability {List}
        */
-      if (
-        (username && !isString(username)) ||
-        (avatar && !isString(avatar)) ||
-        (roles && !isArray(roles)) ||
-        (permissions && !isArray(permissions))
-      ) {
+      if ((username && !isString(username)) || (avatar && !isString(avatar))) {
         const err = 'getUserInfo核心接口异常，请检查返回JSON格式是否正确'
         gp.$baseMessage(err, 'error', 'vab-hey-message-error')
         throw err
       } else {
-        const aclStore = useAclStore()
         // 如不使用username用户名,可删除以下代码
         if (username) this.setUsername(username)
         // 如不使用avatar头像,可删除以下代码
         if (avatar) this.setAvatar(avatar)
-        // 如不使用roles权限控制,可删除以下代码
-        if (roles) aclStore.setRole(roles)
-        // 如不使用permissions权限控制,可删除以下代码
-        if (permissions) aclStore.setPermission(permissions)
       }
     },
     /**
