@@ -8,6 +8,21 @@ export function getList(data: any) {
   })
 }
 
+export function getMenuTree() {
+  return request({
+    url: '/sys/menu/get/tree',
+    method: 'get',
+  })
+}
+
+export function doMenuRoleSave(data: any) {
+  return request({
+    url: '/sys/menu/add/role',
+    method: 'post',
+    data,
+  })
+}
+
 export function doEdit(data: any) {
   return request({
     url: '/sys/menu/modify',

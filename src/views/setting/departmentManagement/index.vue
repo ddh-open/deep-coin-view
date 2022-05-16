@@ -59,14 +59,19 @@
       </el-table-column>
       <el-table-column label="ID" prop="id" show-overflow-tooltip width="90" />
       <el-table-column label="名称" prop="name" show-overflow-tooltip />
-      <el-table-column label="父节点" prop="parentId" show-overflow-tooltip />
+      <el-table-column
+        label="父节点名称"
+        prop="parentName"
+        show-overflow-tooltip
+      />
       <el-table-column label="排序" prop="sort" show-overflow-tooltip />
+      <el-table-column label="描述" prop="remark" show-overflow-tooltip />
       <el-table-column
         label="创建时间"
         prop="createdAt"
         show-overflow-tooltip
       />
-      <el-table-column label="操作" width="300">
+      <el-table-column label="操作" width="240">
         <template #default="{ row }">
           <el-button size="small" type="primary" @click="handleAddUser(row)">
             添加用户

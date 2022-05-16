@@ -8,6 +8,21 @@ export function getList(data: any) {
   })
 }
 
+export function getApiTree() {
+  return request({
+    url: '/sys/api/tree',
+    method: 'get',
+  })
+}
+
+export function doApiRoleSave(data: any) {
+  return request({
+    url: '/sys/api/role',
+    method: 'post',
+    data,
+  })
+}
+
 export async function doEdit(data: any) {
   return request({
     url: '/sys/api/modify',

@@ -15,11 +15,22 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model.trim="form.email" />
       </el-form-item>
-      <el-form-item label="角色" prop="roles">
-        <el-checkbox-group v-model="form.roleIds">
-          <el-checkbox label="admin" />
-          <el-checkbox label="editor" />
-        </el-checkbox-group>
+      <el-form-item label="角色" prop="roleIds">
+        <el-select
+          v-model="form.roleIds"
+          collapse-tags
+          collapse-tags-tooltip
+          filterable
+          multiple
+          placeholder="请选择角色"
+        >
+          <el-option
+            v-for="item in roleData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -31,6 +42,7 @@
 
 <script>
   import { doEdit, doSave } from '@/api/userManagement'
+  import { getTree } from '@/api/roleManagement'
 
   export default defineComponent({
     name: 'UserManagementEdit',
@@ -55,14 +67,27 @@
         },
         title: '',
         dialogFormVisible: false,
+        roleData: [],
       })
+
+      const fetchData = async () => {
+        const {
+          data: { list },
+        } = await getTree()
+        state.roleData = list
+      }
 
       const showEdit = (row) => {
         if (!row) {
           state.title = '添加'
+          state.rules.password[0].required = true
         } else {
           state.title = '编辑'
+          state.rules.password[0].required = false
           state.form = JSON.parse(JSON.stringify(row))
+          state.form.roleIds.forEach((item, i) => {
+            state.form.roleIds[i] = item - 0
+          })
         }
         state.dialogFormVisible = true
       }
@@ -76,6 +101,9 @@
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
+            state.form.roleIds.forEach((item, i) => {
+              state.form.roleIds[i] = item.toString()
+            })
             if (state.title === '添加') {
               const { msg } = await doSave(state.form)
               $baseMessage(msg, 'success', 'vab-hey-message-success')
@@ -90,6 +118,7 @@
         })
       }
 
+      fetchData()
       return {
         ...toRefs(state),
         showEdit,

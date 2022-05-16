@@ -26,8 +26,11 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="排序" prop="order">
-        <el-input v-model="form.order" />
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model="form.sort" />
+      </el-form-item>
+      <el-form-item label="描述" prop="remark">
+        <el-input v-model="form.remark" type="textarea" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-  import { doEdit, getList, doSave } from '@/api/departmentManagement'
+  import { doEdit, doSave, getTree } from '@/api/departmentManagement'
 
   export default defineComponent({
     name: 'DepartmentManagementEdit',
@@ -59,10 +62,10 @@
         },
         rules: {
           parentName: [
-            { required: true, trigger: 'blur', message: '请选择父节点' },
+            { required: true, trigger: 'blur', message: '请选择父节点名称' },
           ],
           name: [{ required: true, trigger: 'blur', message: '请输入名称' }],
-          order: [{ required: true, trigger: 'blur', message: '请输入排序' }],
+          sort: [{ required: true, trigger: 'blur', message: '请输入排序' }],
         },
         title: '',
         dialogFormVisible: false,
@@ -71,7 +74,8 @@
       const fetchData = async () => {
         const {
           data: { list },
-        } = await getList({})
+        } = await getTree()
+        list.unshift({ id: 0, name: '根节点', children: [] })
         state.treeData = list
       }
       const handleNodeClick = (node) => {
@@ -92,12 +96,14 @@
         state.form = {
           parentName: '',
           parentId: '',
+          sort: 0,
         }
         state.dialogFormVisible = false
       }
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
+            state.form.sort = state.form.sort - 0
             if (state.title === '添加') {
               const { msg } = await doSave(state.form)
               $baseMessage(msg, 'success', 'vab-hey-message-success')

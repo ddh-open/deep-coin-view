@@ -8,6 +8,13 @@ export function getList(data: any) {
   })
 }
 
+export function getTree() {
+  return request({
+    url: '/sys/group/tree',
+    method: 'get',
+  })
+}
+
 export function doSave(data: any) {
   return request({
     url: '/sys/group/add',

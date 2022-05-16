@@ -8,6 +8,13 @@ export function getList(data: any) {
   })
 }
 
+export function getTree() {
+  return request({
+    url: '/sys/roles/tree',
+    method: 'get',
+  })
+}
+
 export function doEdit(data: any) {
   return request({
     url: '/sys/roles/modify',

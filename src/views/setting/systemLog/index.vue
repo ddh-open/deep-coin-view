@@ -8,6 +8,7 @@
               v-model.trim="queryForm.username"
               clearable
               placeholder="请输入用户名"
+              @keyup.enter="queryData"
             />
           </el-form-item>
           <el-form-item label="时间">

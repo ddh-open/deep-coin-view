@@ -61,7 +61,11 @@
         width="300"
       >
         <template #default="{ row }">
-          <el-button size="small" type="primary" @click="handleEdit(row)">
+          <el-button
+            size="small"
+            type="primary"
+            @click="handleRelativeRole(row)"
+          >
             设置权限
           </el-button>
           <el-button size="small" type="text" @click="handleEdit(row)">
@@ -93,6 +97,7 @@
       @size-change="handleSizeChange"
     />
     <edit ref="editRef" @fetch-data="fetchData" />
+    <relative ref="relativeRef" />
   </div>
 </template>
 
@@ -106,6 +111,9 @@
       Edit: defineAsyncComponent(() =>
         import('./components/RoleManagementEdit')
       ),
+      Relative: defineAsyncComponent(() =>
+        import('./components/RoleRelativeResources')
+      ),
     },
     setup() {
       const $baseConfirm = inject('$baseConfirm')
@@ -113,6 +121,7 @@
 
       const state = reactive({
         editRef: null,
+        relativeRef: null,
         list: [],
         listLoading: true,
         layout: 'total, sizes, prev, pager, next, jumper',
@@ -133,6 +142,11 @@
           state['editRef'].showEdit(row)
         } else {
           state['editRef'].showEdit()
+        }
+      }
+      const handleRelativeRole = (row) => {
+        if (row.id) {
+          state['relativeRef'].showEdit(row)
         }
       }
       const handleDelete = (row) => {
@@ -184,6 +198,7 @@
         ...toRefs(state),
         setSelectRows,
         handleEdit,
+        handleRelativeRole,
         handleDelete,
         handleSizeChange,
         handleCurrentChange,

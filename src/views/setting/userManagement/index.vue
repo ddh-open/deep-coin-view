@@ -16,6 +16,7 @@
               v-model.trim="queryForm.username"
               clearable
               placeholder="请输入用户名"
+              @keyup.enter="queryData"
             />
           </el-form-item>
           <el-form-item>
@@ -53,6 +54,14 @@
         prop="email"
         show-overflow-tooltip
       />
+
+      <el-table-column align="center" label="所属部门" show-overflow-tooltip>
+        <template #default="{ row }">
+          <el-tag v-for="(item, index) in row.groups" :key="index">
+            {{ item.name }}
+          </el-tag>
+        </template>
+      </el-table-column>
 
       <el-table-column align="center" label="角色" show-overflow-tooltip>
         <template #default="{ row }">
