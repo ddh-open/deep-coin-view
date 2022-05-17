@@ -71,7 +71,7 @@ export const useRoutesStore = defineStore('routes', {
             'error',
             'vab-hey-message-error'
           )
-        if (list[list.length - 1].path !== '*')
+        if (list.length === 0 || list[list.length - 1].path !== '*')
           list.push({
             path: '/:pathMatch(.*)*',
             redirect: '/404',

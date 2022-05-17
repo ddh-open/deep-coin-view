@@ -1,5 +1,10 @@
 import { VabRouteMeta, VabRouteRecord } from '/#/router'
 
+declare interface ApiModuleType {
+  apis: any[]
+  buttons: any[]
+}
+
 declare interface AclModuleType {
   admin: boolean
   role: string[]

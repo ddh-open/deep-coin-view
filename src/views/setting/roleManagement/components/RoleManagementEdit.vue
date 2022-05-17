@@ -21,8 +21,7 @@
 </template>
 
 <script>
-  import { doEdit, doSave } from '@/api/roleManagement'
-  import { getTree } from '@/api/router'
+  import { doCopy, doEdit, doSave } from '@/api/roleManagement'
 
   export default defineComponent({
     name: 'RoleManagementEdit',
@@ -39,21 +38,26 @@
           parentId: '0',
         },
         rules: {
-          role: [
+          name: [
             { required: true, trigger: 'blur', message: '请输入角色名称' },
           ],
         },
         title: '',
         dialogFormVisible: false,
-        list: [],
       })
 
-      const showEdit = (row) => {
+      const showEdit = (row, copy) => {
         if (!row) {
           state.title = '添加'
         } else {
-          state.title = '编辑'
+          if (copy) {
+            state.title = '拷贝'
+          } else {
+            state.title = '编辑'
+          }
           state.form = JSON.parse(JSON.stringify(row))
+          state.form.copyId = row.id.toString()
+          state.form.id = 0
         }
         state.dialogFormVisible = true
       }
@@ -64,17 +68,16 @@
         }
         state.dialogFormVisible = false
       }
-      const fetchData = async () => {
-        const {
-          data: { list },
-        } = await getTree()
-        state.list = list
-      }
       const save = () => {
         state['formRef'].validate(async (valid) => {
           if (valid) {
             if (state.title === '添加') {
               const { msg } = await doSave({
+                ...state.form,
+              })
+              $baseMessage(msg, 'success', 'vab-hey-message-success')
+            } else if (state.title === '拷贝') {
+              const { msg } = await doCopy({
                 ...state.form,
               })
               $baseMessage(msg, 'success', 'vab-hey-message-success')
@@ -89,14 +92,11 @@
           }
         })
       }
-      onMounted(() => {
-        fetchData()
-      })
+      onMounted(() => {})
       return {
         ...toRefs(state),
         showEdit,
         close,
-        fetchData,
         save,
       }
     },

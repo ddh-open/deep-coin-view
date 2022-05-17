@@ -3,6 +3,7 @@
  */
 import { useUserStore } from '@/store/modules/user'
 import { useRoutesStore } from '@/store/modules/routes'
+import { useApiStore } from '@/store/modules/api'
 import { useSettingsStore } from '@/store/modules/settings'
 import VabProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -28,6 +29,7 @@ export function setupPermissions(router: Router) {
       getTheme: { showProgressBar },
     } = useSettingsStore()
     const { routes, setRoutes } = useRoutesStore()
+    const { setApis } = useApiStore()
     const { token, getUserInfo, setVirtualRoles, resetAll } = useUserStore()
 
     if (showProgressBar) VabProgress.start()
@@ -50,6 +52,8 @@ export function setupPermissions(router: Router) {
           else await setVirtualRoles()
           // 根据路由模式获取路由并根据权限过滤
           await setRoutes(authentication)
+          // 获取api权限列表
+          await setApis()
           next({ ...to, replace: true })
         } catch (err) {
           console.error('vue-admin-beautiful错误拦截:', err)

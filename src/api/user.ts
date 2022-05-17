@@ -34,6 +34,13 @@ export function getUserInfo() {
   })
 }
 
+export function getUserApis() {
+  return request({
+    url: '/user/relative/apis',
+    method: 'get',
+  })
+}
+
 export function logout() {
   return request({
     url: '/user/logout',

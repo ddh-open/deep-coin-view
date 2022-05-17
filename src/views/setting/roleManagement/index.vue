@@ -68,7 +68,7 @@
           >
             设置权限
           </el-button>
-          <el-button size="small" type="text" @click="handleEdit(row)">
+          <el-button size="small" type="text" @click="handleEdit(row, true)">
             拷贝
           </el-button>
           <el-button size="small" type="info" @click="handleEdit(row)">
@@ -97,7 +97,7 @@
       @size-change="handleSizeChange"
     />
     <edit ref="editRef" @fetch-data="fetchData" />
-    <relative ref="relativeRef" />
+    <relative ref="relativeRef" @fetch-data="fetchData" />
   </div>
 </template>
 
@@ -137,9 +137,9 @@
       const setSelectRows = (val) => {
         state.selectRows = val
       }
-      const handleEdit = (row) => {
+      const handleEdit = (row, copy) => {
         if (row.id) {
-          state['editRef'].showEdit(row)
+          state['editRef'].showEdit(row, copy)
         } else {
           state['editRef'].showEdit()
         }

@@ -2,7 +2,14 @@
   <el-drawer v-model="drawerVisible" :with-header="false" @close="close">
     <el-tabs v-model="tabName">
       <el-tab-pane label="菜单权限" name="menu">
-        <el-button type="primary" @click="menuSave">确 定</el-button>
+        <el-button
+          size="small"
+          style="position: absolute; z-index: 9; right: 10px"
+          type="primary"
+          @click="menuSave"
+        >
+          确 定
+        </el-button>
         <el-tree
           ref="treeMenuRef"
           :data="menuData"
@@ -19,7 +26,14 @@
         </el-tree>
       </el-tab-pane>
       <el-tab-pane label="API权限" name="api">
-        <el-button type="primary" @click="apiSave">确 定</el-button>
+        <el-button
+          size="small"
+          style="position: absolute; z-index: 9; right: 10px"
+          type="primary"
+          @click="apiSave"
+        >
+          确 定
+        </el-button>
         <el-tree
           ref="treeApiRef"
           :data="apiData"
@@ -45,8 +59,8 @@
 
   export default defineComponent({
     name: 'RoleRelativeResources',
-    // emits: ['fetch-data'],
-    setup() {
+    emits: ['fetch-data'],
+    setup(props, { emit }) {
       const $baseMessage = inject('$baseMessage')
       const state = reactive({
         tabName: 'menu',
@@ -62,11 +76,16 @@
         if (row.id) {
           state.roleId = row.id
           state.drawerVisible = true
+          nextTick(() => {
+            state.treeMenuRef.setCheckedKeys(row.menus ? row.menus : [])
+            state.treeApiRef.setCheckedKeys(row.apis ? row.apis : [])
+          })
         }
       }
 
       const close = () => {
         state.roleId = 0
+        emit('fetch-data')
         state.drawerVisible = false
       }
       const fetchApiData = async () => {
@@ -85,8 +104,8 @@
         const { msg } = await doMenuRoleSave({
           roleId: state.roleId.toString(),
           menuIds: state.treeMenuRef
-            .getCheckedNodes(false, true)
-            .map((item) => item.id.toString()),
+            .getCheckedKeys(false)
+            .map((item) => item.toString()),
         })
         $baseMessage(msg, 'success', 'vab-hey-message-success')
       }
@@ -94,8 +113,8 @@
         const { msg } = await doApiRoleSave({
           roleId: state.roleId.toString(),
           apiIds: state.treeApiRef
-            .getCheckedNodes(false, true)
-            .map((item) => item.id.toString()),
+            .getCheckedKeys(false)
+            .map((item) => item.toString()),
         })
         $baseMessage(msg, 'success', 'vab-hey-message-success')
       }

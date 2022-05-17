@@ -31,6 +31,14 @@ export function doSave(data: any) {
   })
 }
 
+export function doCopy(data: any) {
+  return request({
+    url: '/sys/roles/copy',
+    method: 'post',
+    data,
+  })
+}
+
 export function doDelete(data: any) {
   return request({
     url: '/sys/roles/delete',

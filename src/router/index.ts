@@ -862,7 +862,6 @@ export const asyncRoutes: VabRouteRecord[] = [
     meta: {
       title: '配置',
       icon: 'user-settings-line',
-      guard: ['Admin'],
     },
     children: [
       {
