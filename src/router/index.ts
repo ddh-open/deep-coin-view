@@ -856,6 +856,26 @@ export const asyncRoutes: VabRouteRecord[] = [
     ],
   },
   {
+    path: '/cmdb',
+    name: 'Cmdb',
+    component: Layout,
+    meta: {
+      title: '主机',
+      icon: 'ghost-smile-line',
+    },
+    children: [
+      {
+        path: 'host',
+        name: 'CmdbHost',
+        component: () => import('@/views/cmdb/host/index.vue'),
+        meta: {
+          title: '主机管理',
+          icon: 'ghost-2-line',
+        },
+      },
+    ],
+  },
+  {
     path: '/setting',
     name: 'PersonnelManagement',
     component: Layout,
