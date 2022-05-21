@@ -104,7 +104,7 @@
                 <el-button
                   size="small"
                   type="primary"
-                  @click="handleEdit(row, 'addChild')"
+                  @click="handleShell(row)"
                 >
                   调试
                 </el-button>
@@ -131,6 +131,7 @@
         </vab-card>
       </el-col>
     </el-row>
+    <shell ref="shellRef" />
   </div>
 </template>
 
@@ -140,14 +141,15 @@
 
   export default defineComponent({
     name: 'CmdbHost',
-    components: {},
-
+    components: {
+      Shell: defineAsyncComponent(() => import('./components/hostShell')),
+    },
     setup() {
       const $baseConfirm = inject('$baseConfirm')
       const $baseMessage = inject('$baseMessage')
-
       const state = reactive({
         editRef: null,
+        shellRef: null,
         treeCurrentNode: 0,
         groupTree: null,
         list: [],
@@ -170,6 +172,9 @@
         } else {
           state['editRef'].showEdit()
         }
+      }
+      const handleShell = (row) => {
+        state['shellRef'].showShell(row)
       }
       const handleCheck = (row) => {
         if (row.id) {
@@ -242,6 +247,7 @@
         handleCheck,
         nodeExpand,
         nodeCurrentChange,
+        handleShell,
         Refresh,
         Plus,
         Search,

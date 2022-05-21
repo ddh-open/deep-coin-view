@@ -4,6 +4,7 @@
 import { useUserStore } from '@/store/modules/user'
 import { useRoutesStore } from '@/store/modules/routes'
 import { useApiStore } from '@/store/modules/api'
+import { useWsStore } from '@/store/modules/ws'
 import { useSettingsStore } from '@/store/modules/settings'
 import VabProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -16,6 +17,7 @@ import {
   supportVisit,
 } from '@/config'
 import { Router } from 'vue-router'
+import SocketService from '@/api/ws'
 
 export function setupPermissions(router: Router) {
   VabProgress.configure({
@@ -40,6 +42,13 @@ export function setupPermissions(router: Router) {
 
     if (hasToken) {
       if (routes.length) {
+        // 在这里连接websocket
+        // @ts-ignore
+        const ws = SocketService.Instance('ws://127.0.0.1:8086/base/ws')
+        // @ts-ignore
+        ws.connect()
+        const wsStore = useWsStore()
+        wsStore.setWs(ws)
         // 禁止已登录用户返回登录页
         if (to.path === '/login') {
           next({ path: '/' })

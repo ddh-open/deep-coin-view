@@ -5,6 +5,18 @@ declare interface ApiModuleType {
   buttons: any[]
 }
 
+declare interface WebSocketType {
+  messages: any[]
+  ws: any
+}
+
+declare interface WebSocketMessage {
+  uuid: string
+  type: string
+  action: string
+  param: string
+}
+
 declare interface AclModuleType {
   admin: boolean
   role: string[]
