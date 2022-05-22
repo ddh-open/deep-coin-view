@@ -131,7 +131,21 @@
         </vab-card>
       </el-col>
     </el-row>
-    <shell ref="shellRef" />
+    <vab-dialog
+      v-model="dialogVisible"
+      :close-on-click-modal="false"
+      show-fullscreen
+      :title="title"
+      width="70%"
+    >
+      <xterm-shell
+        :id="title"
+        ref="xtermShellRef"
+        :ip="ip"
+        :port="port"
+        :user="user"
+      />
+    </vab-dialog>
   </div>
 </template>
 
@@ -142,14 +156,20 @@
   export default defineComponent({
     name: 'CmdbHost',
     components: {
-      Shell: defineAsyncComponent(() => import('./components/hostShell')),
+      VabDialog: defineAsyncComponent(() => import('@/plugins/VabDialog')),
+      XtermShell: defineAsyncComponent(() => import('./components/xtermShell')),
     },
     setup() {
       const $baseConfirm = inject('$baseConfirm')
       const $baseMessage = inject('$baseMessage')
       const state = reactive({
         editRef: null,
-        shellRef: null,
+        dialogVisible: false,
+        title: '',
+        ip: '',
+        port: '',
+        user: '',
+        xtermShellRef: null,
         treeCurrentNode: 0,
         groupTree: null,
         list: [],
@@ -174,7 +194,13 @@
         }
       }
       const handleShell = (row) => {
-        state['shellRef'].showShell(row)
+        if (row.id) {
+          state.title = row.ip
+          state.ip = row.ip
+          state.port = row.port
+          state.user = row.user
+          state.dialogVisible = true
+        }
       }
       const handleCheck = (row) => {
         if (row.id) {

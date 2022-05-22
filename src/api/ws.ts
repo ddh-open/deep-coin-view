@@ -1,10 +1,10 @@
 //这里需要引入vuex
-// import store from "@/store";
-
+import { useWsStore } from '@/store/modules/ws'
 import { WebSocketMessage } from '/#/store'
 
 export default class SocketService {
   static instance = null
+  static wsStore = useWsStore()
   static url = ''
   static Instance(url: string) {
     if (!this.instance) {
@@ -57,8 +57,8 @@ export default class SocketService {
     // 得到服务端发送过来的数据
     // @ts-ignore
     this.ws.onmessage = (msg) => {
-      console.log(msg)
-      console.log(msg.data, '从服务端获取到了数据')
+      const message = JSON.parse(msg.data)
+      SocketService.wsStore.addMessage(message)
     }
   }
 

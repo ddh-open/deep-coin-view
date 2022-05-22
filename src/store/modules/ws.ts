@@ -15,9 +15,6 @@ export const useWsStore = defineStore('ws', {
     setWs(ws: any) {
       this.ws = ws
     },
-    getWs() {
-      return this.ws
-    },
     sendWsMessage(message: WebSocketMessage) {
       if (this.ws != null) {
         this.ws.send(message)
