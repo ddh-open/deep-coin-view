@@ -876,6 +876,58 @@ export const asyncRoutes: VabRouteRecord[] = [
     ],
   },
   {
+    path: '/cluster',
+    name: 'Cluster',
+    component: Layout,
+    meta: {
+      title: '应用',
+      icon: 'ghost-smile-line',
+    },
+    children: [
+      {
+        path: 'application',
+        name: 'ServiceManagement',
+        component: () =>
+          import('@/views/application/serviceManagement/index.vue'),
+        meta: {
+          title: '应用管理',
+          icon: 'ghost-2-line',
+        },
+      },
+    ],
+  },
+  {
+    path: '/technological',
+    name: 'Technological',
+    component: Layout,
+    meta: {
+      title: '流程',
+      icon: 'ghost-smile-line',
+    },
+    children: [
+      {
+        path: 'apply',
+        name: 'ApplicationForm',
+        component: () =>
+          import('@/views/technological/applicationForm/index.vue'),
+        meta: {
+          title: '应用申请单',
+          icon: 'ghost-2-line',
+        },
+      },
+      {
+        path: 'myApply',
+        name: 'MyApplicationForm',
+        component: () =>
+          import('@/views/technological/myApplicationForm/index.vue'),
+        meta: {
+          title: '我的申请单',
+          icon: 'ghost-2-line',
+        },
+      },
+    ],
+  },
+  {
     path: '/setting',
     name: 'PersonnelManagement',
     component: Layout,

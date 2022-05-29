@@ -15,7 +15,7 @@ export const needErrorLog = () => {
 
 export const addErrorLog = (err: any) => {
   // eslint-disable-next-line no-console
-  if (!err.isRequest) console.error('vue-admin-better错误拦截:', err)
+  if (!err.isRequest) console.error('deep-coin错误拦截:', err)
   const url = window.location.href
   const { addErrorLog } = useErrorLogStore(pinia)
   addErrorLog({ err, url })

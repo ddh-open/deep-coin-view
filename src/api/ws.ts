@@ -58,6 +58,7 @@ export default class SocketService {
     // @ts-ignore
     this.ws.onmessage = (msg) => {
       const message = JSON.parse(msg.data)
+      console.log(message)
       SocketService.wsStore.addMessage(message)
     }
   }

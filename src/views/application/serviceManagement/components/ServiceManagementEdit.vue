@@ -6,10 +6,13 @@
     @close="close"
   >
     <el-form ref="formRef" label-width="80px" :model="form" :rules="rules">
-      <el-form-item label="角色名称" prop="name">
+      <el-form-item label="服务名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="角色描述" prop="remark">
+      <el-form-item label="Git仓库" prop="gitProject">
+        <el-input v-model="form.gitProject" />
+      </el-form-item>
+      <el-form-item label="服务描述" prop="remark">
         <el-input v-model="form.remark" type="textarea" />
       </el-form-item>
     </el-form>
@@ -21,10 +24,10 @@
 </template>
 
 <script>
-  import { doCopy, doEdit, doSave } from '@/api/roleManagement'
+  import { doEdit, doSave } from '@/api/application'
 
   export default defineComponent({
-    name: 'RoleManagementEdit',
+    name: 'ServiceManagementEdit',
     emits: ['fetch-data'],
     setup(props, { emit }) {
       const $baseMessage = inject('$baseMessage')
@@ -35,29 +38,26 @@
         form: {
           name: '',
           remark: '',
-          parentId: '0',
+          gitProject: '',
         },
         rules: {
           name: [
             { required: true, trigger: 'blur', message: '请输入角色名称' },
+          ],
+          gitProject: [
+            { required: true, trigger: 'blur', message: '请输入git仓库' },
           ],
         },
         title: '',
         dialogFormVisible: false,
       })
 
-      const showEdit = (row, copy) => {
+      const showEdit = (row) => {
         if (!row) {
           state.title = '添加'
         } else {
+          state.title = '编辑'
           state.form = JSON.parse(JSON.stringify(row))
-          if (copy) {
-            state.title = '拷贝'
-            state.form.copyId = row.id.toString()
-            state.form.id = 0
-          } else {
-            state.title = '编辑'
-          }
         }
         state.dialogFormVisible = true
       }
@@ -73,11 +73,6 @@
           if (valid) {
             if (state.title === '添加') {
               const { msg } = await doSave({
-                ...state.form,
-              })
-              $baseMessage(msg, 'success', 'vab-hey-message-success')
-            } else if (state.title === '拷贝') {
-              const { msg } = await doCopy({
                 ...state.form,
               })
               $baseMessage(msg, 'success', 'vab-hey-message-success')
